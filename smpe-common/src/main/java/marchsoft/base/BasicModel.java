@@ -31,11 +31,11 @@ public class BasicModel<T extends Model<?>> extends Model<T> implements Serializ
 
     @ApiModelProperty(value = "创建者")
     @TableField(fill = FieldFill.INSERT)
-    private String createBy;
+    private Long createBy;
 
     @ApiModelProperty(value = "更新者")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private String updateBy;
+    private Long updateBy;
 
     @ApiModelProperty(value = "创建日期")
     @TableField(fill = FieldFill.INSERT)
@@ -44,6 +44,10 @@ public class BasicModel<T extends Model<?>> extends Model<T> implements Serializ
     @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+    @ApiModelProperty(value = "是否已删除")
+    @TableField(value = "is_deleted")
+    private Boolean deleted;
 
     /**
      * description:重写父类的selectOne方法，添加"LIMIT 1"的限制，默认查第一条；
@@ -62,7 +66,9 @@ public class BasicModel<T extends Model<?>> extends Model<T> implements Serializ
     }
 
     /**
-     * description:批量新增，一条sql插入所有的sql语句<p>
+     * description:批量新增，一条sql插入所有的sql语句<br>
+     * 批量新增，直接传实体的集合对象，底层执行的是类似于如下的sql:<br>
+     * insert into user(id, name, age) values (1, "a", 17), (2,"b", 18),(3,"c",19);
      * 使用Collection<T>其中一个对象执行即可批量插入
      *
      * @param batchList 新增数据的集合对象
